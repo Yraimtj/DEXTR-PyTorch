@@ -3,7 +3,8 @@ import os
 import torch, cv2
 import random
 import numpy as np
-from PIL import Image
+from PIL import Image,ImageDraw
+ 
 
 
 def tens2image(im):
@@ -338,10 +339,24 @@ def color_map(N=256, normalized=False):
     return cmap
 
 
-def save_mask(results, mask_path):
+def save_mask(results, mask_path,image_path):
     mask = np.zeros(results[0].shape)
     for ii, r in enumerate(results):
         mask[r] = ii + 1
     result = Image.fromarray(mask.astype(np.uint8))
     result.putpalette(list(color_map(80).flatten()))
     result.save(mask_path)
+    img = Image.open(image_path).convert('RGBA')
+        
+    img4 = Image.open(mask_path).convert('RGBA')
+        
+    img3 = Image.blend(img, img4, 0.5)
+    
+    img3.save('out.png')
+    
+    
+    
+    
+    
+    
+

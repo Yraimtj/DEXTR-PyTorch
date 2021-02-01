@@ -12,7 +12,7 @@ import networks.deeplab_resnet as resnet
 from mypath import Path
 from dataloaders import helpers as helpers
 
-modelName = 'dextr_pascal-sbd'
+modelName = 'dextr_coco'
 pad = 50
 thres = 0.8
 gpu_id = 0
@@ -36,7 +36,8 @@ net.eval()
 net.to(device)
 
 #  Read image and click the points
-image = np.array(Image.open('ims/bear.jpg'))
+image_path = 'ims/eggs.jpg'
+image = np.array(Image.open(image_path))
 plt.ion()
 plt.axis('off')
 plt.imshow(image)
@@ -49,8 +50,8 @@ with torch.no_grad():
         extreme_points_ori = np.array(plt.ginput(4, timeout=0)).astype(np.int)
         if extreme_points_ori.shape[0] < 4:
             if len(results) > 0:
-                helpers.save_mask(results, 'demo.png')
-                print('Saving mask annotation in demo.png and exiting...')
+                helpers.save_mask(results, 'demo.png',image_path)
+                print('Saving mask annotation in demo.png , prediction in out.png and exiting...')
             else:
                 print('Exiting...')
             sys.exit()
